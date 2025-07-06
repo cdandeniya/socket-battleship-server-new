@@ -11,6 +11,25 @@
 #define BUFFER_SIZE 1024
 #define MAX_PIECES 5
 
+// Error codes
+#define E100 "E 100"
+#define E101 "E 101"
+#define E102 "E 102"
+#define E200 "E 200"
+#define E201 "E 201"
+#define E202 "E 202"
+#define E300 "E 300"
+#define E301 "E 301"
+#define E302 "E 302"
+#define E303 "E 303"
+#define E400 "E 400"
+#define E401 "E 401"
+
+// Response codes
+#define ACK "A"
+#define HALT_WIN "H 1"
+#define HALT_LOSS "H 0"
+
 // Game state
 typedef struct {
     int width;
