@@ -1,0 +1,11 @@
+# Build outputs
+build/
+*.o
+*.exe
+*.out
+
+# Debug files
+*.dSYM/
+*.log
+output.log
+valgrind_output.log
