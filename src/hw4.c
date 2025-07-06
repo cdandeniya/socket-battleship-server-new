@@ -34,7 +34,19 @@ int main() {
     address2.sin_addr.s_addr = INADDR_ANY;
     address2.sin_port = htons(PORT2);
 
-    printf("Set up address structures for ports %d and %d
+    // Bind first socket
+    if (bind(server_fd1, (struct sockaddr *)&address1, sizeof(address1)) < 0) {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // Bind second socket
+    if (bind(server_fd2, (struct sockaddr *)&address2, sizeof(address2)) < 0) {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Bound sockets to ports %d and %d
 ", PORT1, PORT2);
     return 0;
 }
