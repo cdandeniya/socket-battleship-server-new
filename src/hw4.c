@@ -46,6 +46,12 @@ typedef struct {
     bool ready;
 } Player;
 
+// Function declarations
+void send_response(int socket_fd, const char *message);
+char* get_first_token(const char *buffer);
+Board* create_board(int width, int height);
+void free_board(Board *board);
+
 int main() {
     printf("Battleship server starting...
 ");
