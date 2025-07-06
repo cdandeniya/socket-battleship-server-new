@@ -46,7 +46,18 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Bound sockets to ports %d and %d
+    // Listen on both sockets
+    if (listen(server_fd1, 1) < 0) {
+        perror("listen failed");
+        exit(EXIT_FAILURE);
+    }
+
+    if (listen(server_fd2, 1) < 0) {
+        perror("listen failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Server listening on ports %d and %d...
 ", PORT1, PORT2);
     return 0;
 }
