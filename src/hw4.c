@@ -25,7 +25,16 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Created sockets for both players
-");
+    // Set up address structures
+    address1.sin_family = AF_INET;
+    address1.sin_addr.s_addr = INADDR_ANY;
+    address1.sin_port = htons(PORT1);
+
+    address2.sin_family = AF_INET;
+    address2.sin_addr.s_addr = INADDR_ANY;
+    address2.sin_port = htons(PORT2);
+
+    printf("Set up address structures for ports %d and %d
+", PORT1, PORT2);
     return 0;
 }
