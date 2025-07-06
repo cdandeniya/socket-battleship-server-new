@@ -9,7 +9,7 @@
 #define PORT2 2202
 
 int main() {
-    int server_fd1, server_fd2;
+    int server_fd1, server_fd2, client1_fd, client2_fd;
     struct sockaddr_in address1, address2;
     int addrlen = sizeof(struct sockaddr_in);
 
@@ -59,5 +59,29 @@ int main() {
 
     printf("Server listening on ports %d and %d...
 ", PORT1, PORT2);
+
+    // Accept first player
+    if ((client1_fd = accept(server_fd1, (struct sockaddr *)&address1, (socklen_t*)&addrlen)) < 0) {
+        perror("accept failed");
+        exit(EXIT_FAILURE);
+    }
+    printf("Player 1 connected on port %d!
+", PORT1);
+
+    // Accept second player
+    if ((client2_fd = accept(server_fd2, (struct sockaddr *)&address2, (socklen_t*)&addrlen)) < 0) {
+        perror("accept failed");
+        exit(EXIT_FAILURE);
+    }
+    printf("Player 2 connected on port %d!
+", PORT2);
+
+    printf("Both players connected! Starting game...
+");
+
+    close(client1_fd);
+    close(client2_fd);
+    close(server_fd1);
+    close(server_fd2);
     return 0;
 }
