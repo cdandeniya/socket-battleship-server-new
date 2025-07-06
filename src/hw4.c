@@ -52,6 +52,43 @@ char* get_first_token(const char *buffer);
 Board* create_board(int width, int height);
 void free_board(Board *board);
 
+// Helper functions
+void send_response(int socket_fd, const char *message) {
+    send(socket_fd, message, strlen(message), 0);
+}
+
+char* get_first_token(const char *buffer) {
+    char *buffer_copy = strdup(buffer);
+    char *token = strtok(buffer_copy, " ");
+    char *result = strdup(token);
+    free(buffer_copy);
+    return result;
+}
+
+Board* create_board(int width, int height) {
+    Board *board = malloc(sizeof(Board));
+    board->width = width;
+    board->height = height;
+    board->pieces_remaining = MAX_PIECES;
+    board->initialized = false;
+
+    board->board = malloc(height * sizeof(int*));
+    for (int i = 0; i < height; i++) {
+        board->board[i] = calloc(width, sizeof(int));
+    }
+
+    return board;
+}
+
+void free_board(Board *board) {
+    if (!board) return;
+    for (int i = 0; i < board->height; i++) {
+        free(board->board[i]);
+    }
+    free(board->board);
+    free(board);
+}
+
 int main() {
     printf("Battleship server starting...
 ");
