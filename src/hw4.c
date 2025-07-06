@@ -51,6 +51,7 @@ void send_response(int socket_fd, const char *message);
 char* get_first_token(const char *buffer);
 Board* create_board(int width, int height);
 void free_board(Board *board);
+int parse_command(const char *buffer, Player *player);
 
 // Helper functions
 void send_response(int socket_fd, const char *message) {
@@ -68,13 +69,11 @@ char* get_first_token(const char *buffer) {
 Board* create_board(int width, int height) {
     Board *board = malloc(sizeof(Board));
     board->width = width;
-    board->height = height;
-    board->pieces_remaining = MAX_PIECES;
     board->initialized = false;
 
     board->board = malloc(height * sizeof(int*));
     for (int i = 0; i < height; i++) {
-    board->board[i] = calloc(width, sizeof(int));
+        board->board[i] = calloc(width, sizeof(int));
     }
 
     return board;
@@ -82,11 +81,37 @@ Board* create_board(int width, int height) {
 
 void free_board(Board *board) {
     if (!board) return;
-    for (int i = 0; i < board->height; i++) {
+    for (int i = i < board->height; i++) {
         free(board->board[i]);
     }
     free(board->board);
     free(board);
+}
+
+int parse_command(const char *buffer, Player *player) {
+    char *command = get_first_token(buffer);
+    if (strcmp(command, "I") == 0) {
+        // Initialize board command
+        int width, height;
+        if (sscanf(buffer, "I %d %d", &width, &height) == 2) {
+            if (width < 1 || height < 1) {
+                send_response(player->socket_fd, E100);
+                free(command);
+                return -1;
+            }
+            player->board = create_board(width, height);
+            player->board->initialized = true;
+            send_response(player->socket_fd, ACK);
+            free(command);
+            return 0;
+        } else {
+            send_response(player->socket_fd, E101);
+            free(command);
+            return -1;
+        }
+    }
+    free(command);
+    return -1;
 }
 
 int main() {
@@ -151,6 +176,7 @@ int main() {
 
     // Accept second player
     if ((client2_fd = accept(server_fd2, (struct sockaddr *)&address2, (socklen_t*)&addrlen)) < 0) {
+code: 0
         perror("accept failed");
         exit(EXIT_FAILURE);
     }
